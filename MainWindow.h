@@ -12,6 +12,8 @@ QT_END_NAMESPACE
 #include <Qt3DRender/QSceneLoader>
 
 #include <Qt3DCore/QEntity>
+
+class EntityWrapper;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -28,6 +30,8 @@ private:
     Ui::MainWindow *ui;
     QTimer timer;
     double alpha = 0;
+    int colourValue = 0;
+    int colourDir = 1;
 
     QWidget *container;
 
@@ -35,7 +39,7 @@ private:
     Qt3DRender::QCamera *cameraEntity = nullptr;
     Qt3DCore::QEntity *sceneLoaderEntity = nullptr;
     Qt3DRender::QSceneLoader *loader = nullptr;
-    Qt3DCore::QTransform *transform = nullptr;
+    EntityWrapper *torusWrapper = nullptr;
 };
 
 #endif // MAINWINDOW_H

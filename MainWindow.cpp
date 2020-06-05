@@ -26,6 +26,8 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include "EntityWrapper.h"
+
 #include <QScreen>
 #include <Qt3DCore/QTransform>
 #include <Qt3DRender/QPointLight>
@@ -33,6 +35,7 @@
 #include <Qt3DExtras/QOrbitCameraController>
 #include <Qt3DExtras/QForwardRenderer>
 #include <math.h>
+
 
 // ./Qt3DTests > tree.txt
 // dot -Tpdf tree.txt | okular -
@@ -158,22 +161,19 @@ void MainWindow::OnLoaderStatusChanged(Qt3DRender::QSceneLoader::Status status)
 
         auto torusEntity = rootEntity->findChild<Qt3DCore::QEntity *>("TorusObject");
         if(torusEntity)
-        {
-            for(auto comp: torusEntity->components())
-            {
-                transform = qobject_cast<Qt3DCore::QTransform *>(comp);
-                if(transform)
-                    break;
-            }
-        }
+            torusWrapper = new EntityWrapper(torusEntity);
     }
 }
 
 void MainWindow::OnTimer()
 {
-    if(transform)
+    if(torusWrapper)
     {
         alpha += 0.01;
-        transform->setTranslation(QVector3D(cos(alpha), sin(alpha), 0));
+        torusWrapper->Move(cos(alpha), sin(alpha), 0);
+        torusWrapper->setSpecular(QColor(colourValue, 0, 255-colourValue));
+        colourValue += colourDir;
+        if(colourValue == 0 || colourValue == 255)
+            colourDir = - colourDir;
     }
 }
